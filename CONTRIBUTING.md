@@ -1,0 +1,4 @@
+- Never push directly to main
+- Always work in your branch
+- One feature = one commit message
+- Pull before pushing
