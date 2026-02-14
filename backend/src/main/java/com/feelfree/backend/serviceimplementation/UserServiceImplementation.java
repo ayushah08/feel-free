@@ -28,6 +28,6 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(()->{throw new RuntimeException("User Not Found with id : " +id)});
+        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User Not Found with id : " +id));
     }
 }
