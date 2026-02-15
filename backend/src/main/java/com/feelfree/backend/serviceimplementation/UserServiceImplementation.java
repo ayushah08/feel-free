@@ -1,5 +1,6 @@
 package com.feelfree.backend.serviceimplementation;
 
+import com.feelfree.backend.dto.UserResponseDTO;
 import com.feelfree.backend.entity.User;
 import com.feelfree.backend.repository.UserRepository;
 import com.feelfree.backend.service.UserService;
@@ -13,21 +14,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
 
+
+
     @Autowired
    private UserRepository userRepository;
     
     @Override
-    public User registerUser(User user) {
-        return userRepository.save(user);
+    public UserResponseDTO registerUser(User user) {
+        User savedUser = userRepository.save(user);
+        return mapToDTO(savedUser);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+        List<UserResponseDTO> allUsers = userRepository.findAll().stream().map(this::mapToDTO).toList();
+        return allUsers;
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User Not Found with id : " +id));
+    public UserResponseDTO getUserById(Long id) {
+        User userById = userRepository.findById(id).orElseThrow(()->new RuntimeException("User Not Found with ID : " + id));
+        return mapToDTO(userById);
     }
+
+    private UserResponseDTO mapToDTO(User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .profilePhotoUrl(user.getProfilePhotoUrl())
+                .currentStreak(user.getCurrentStreak())
+                .longestStreak(user.getLongestStreak())
+                .totalSupportGiven(user.getTotalSupportGiven())
+                .totalSupportTaken(user.getTotalSupportTaken())
+                .build();
+    }
+
 }
