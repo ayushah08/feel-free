@@ -6,6 +6,7 @@ import com.feelfree.backend.repository.UserRepository;
 import com.feelfree.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +19,12 @@ public class UserServiceImplementation implements UserService {
 
     @Autowired
    private UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
     
     @Override
     public UserResponseDTO registerUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         return mapToDTO(savedUser);
     }
