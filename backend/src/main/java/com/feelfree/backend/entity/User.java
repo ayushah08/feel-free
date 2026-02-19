@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -44,6 +45,8 @@ public class User {
     private int totalSupportTaken;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDate lastActivityDate;
 
 
 
