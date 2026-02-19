@@ -7,6 +7,7 @@ import com.feelfree.backend.repository.Mood.MoodRepository;
 import com.feelfree.backend.repository.UserRepository;
 import com.feelfree.backend.service.Ai.AiService;
 import com.feelfree.backend.service.Mood.MoodService;
+import com.feelfree.backend.service.achivement.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,8 @@ public class MoodServiceImplementation implements MoodService {
     private final AiService aiService;
     private final MoodRepository moodRepository;
     private final UserRepository userRepository;
+    private final AchievementService achievementService;
+
 
     @Override
     public Mood logMood(Long userId, MoodType moodType) {
@@ -38,15 +41,15 @@ public class MoodServiceImplementation implements MoodService {
                 .user(user)
                 .build();
 
-        return moodRepository.save(mood);
+        Mood save = moodRepository.save(mood);
+        achievementService.checkAndUnlockAchievements(user);
+
+        return save;
     }
 
     @Override
     public List<Mood> getUserMoods(Long userId) {
 
-        return moodRepository.findAll()
-                .stream()
-                .filter(mood -> mood.getUser().getId().equals(userId))
-                .toList();
+        return moodRepository.findUserById(userId);
     }
 }
