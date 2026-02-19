@@ -11,6 +11,7 @@ import com.feelfree.backend.service.achivement.AchievementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,11 +43,30 @@ public class MoodServiceImplementation implements MoodService {
                 .build();
 
         Mood save = moodRepository.save(mood);
+        updateStreak(user);
         achievementService.checkAndUnlockAchievements(user);
 
         return save;
     }
+        public void updateStreak(User user){
+            LocalDate today = LocalDate.now();
+            LocalDate lastActivity = user.getLastActivityDate();
 
+            if (lastActivity == null){
+                user.setCurrentStreak(1);
+            } else if (lastActivity.equals(today.minusDays(1))) {
+                user.setCurrentStreak(user.getCurrentStreak()+1);
+
+            }else if (!lastActivity.equals(today)){
+                user.setCurrentStreak(1);
+            }
+
+            if (user.getCurrentStreak() > user.getLongestStreak()){
+                user.setLongestStreak(user.getCurrentStreak());
+            }
+            user.setLastActivityDate(today);
+            userRepository.save(user);
+        }
     @Override
     public List<Mood> getUserMoods(Long userId) {
 
