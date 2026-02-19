@@ -18,4 +18,9 @@ public interface AchievementService {
     AchievementSummaryDTO getSummary(Long userId);
 
     List<AchievementResponseDTO> getUserAchievements(Long userId);
+
+     int calculateProgress(User user, Achievement achievement) ;
+
+     void unlock(User user, Achievement achievement);
+
 }

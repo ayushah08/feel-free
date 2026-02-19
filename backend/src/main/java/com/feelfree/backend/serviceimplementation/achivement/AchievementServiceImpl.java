@@ -2,6 +2,7 @@ package com.feelfree.backend.serviceimplementation.achivement;
 
 import com.feelfree.backend.dto.Achivement.AchievementResponseDTO;
 import com.feelfree.backend.dto.Achivement.AchievementSummaryDTO;
+import com.feelfree.backend.dto.profile.ProfileSummaryResponse;
 import com.feelfree.backend.entity.Achivement.Achievement;
 import com.feelfree.backend.entity.Achivement.UserAchievement;
 import com.feelfree.backend.entity.Mood.MoodType;
@@ -40,7 +41,7 @@ public class AchievementServiceImpl implements AchievementService {
                             .findByUserIdAndAchievementId(user.getId(), achievement.getId())
                             .orElseGet(() -> createUserAchievement(user, achievement));
 
-            if (userAchievement.isUnlocked()) continue;
+            if (userAchievement.getUnlocked()) continue;
 
             int progress = calculateProgress(user, achievement);
 
@@ -54,25 +55,19 @@ public class AchievementServiceImpl implements AchievementService {
             userAchievementRepository.save(userAchievement);
         }
     }
-    private int calculateProgress(User user, Achievement achievement) {
 
-        switch (achievement.getType()) {
+     public int calculateProgress(User user, Achievement achievement) {
 
-            case FIRST_MOOD:
-                return moodRepository.countByUser(user) >= 1 ? 1 : 0;
+        return switch (achievement.getType()) {
 
-            case STREAK_7:
-                return user.getCurrentStreak();
+            case FIRST_MOOD -> (int) moodRepository.countByUser(user);
 
-            case STREAK_30:
-                return user.getCurrentStreak();
+            case STREAK_7 -> user.getCurrentStreak();
 
-            default:
-                return 0;
-        }
+
+            default -> 0;
+        };
     }
-
-
 
 
     public UserAchievement createUserAchievement(User user, Achievement achievement) {
@@ -86,9 +81,7 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
 
-
-
-    private void unlock(User user, Achievement achievement) {
+    public void unlock(User user, Achievement achievement) {
 
         userAchievementRepository.save(
                 UserAchievement.builder()
@@ -110,7 +103,7 @@ public class AchievementServiceImpl implements AchievementService {
         long unlocked =
                 userAchievementRepository.findByUser(user)
                         .stream()
-                        .filter(UserAchievement::isUnlocked)
+                        .filter(UserAchievement::getUnlocked)
                         .count();
 
         double percentage =
@@ -134,9 +127,28 @@ public class AchievementServiceImpl implements AchievementService {
                         .title(ua.getAchievement().getTitle())
                         .description(ua.getAchievement().getDescription())
                         .rarity(ua.getAchievement().getRarity())
-                        .unlocked(ua.isUnlocked())
+                        .unlocked(ua.getUnlocked())
                         .unlockedDate(ua.getUnlockedDate())
                         .build())
                 .toList();
+    }
+
+    public ProfileSummaryResponse getProfileSummary(Long userId){
+
+        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException(" User Not Found"));
+
+       List< UserAchievement >  userAchievement = userAchievementRepository.findByUser(user);
+
+
+       int totalAchievements = achievementRepository.findAll().size();
+
+       int unlockedAchievements;
+        unlockedAchievements = (int) userAchievement.stream().filter(UserAchievement::getUnlocked).count();
+
+        double progress = totalAchievements == 0 ? 0 : ((double) unlockedAchievements / totalAchievements *100);
+
+        return
+                ProfileSummaryResponse.builder().longestStreak(user.getLongestStreak()).currentStreak(user.getCurrentStreak()).totalAchievements(totalAchievements).overallProgressPercentage(progress).build();
+
     }
 }

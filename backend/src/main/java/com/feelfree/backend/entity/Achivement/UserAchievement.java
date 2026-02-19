@@ -31,7 +31,7 @@ public class UserAchievement {
 
     private int progressValue;
 
-    private boolean unlocked;
+    private Boolean unlocked;
 
     private LocalDate unlockedDate;
 }
