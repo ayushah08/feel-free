@@ -26,6 +26,8 @@ public class AiServiceImplementation implements AiService {
 
             case ANGRY ->
                     "Pause before reacting. Your feelings deserve space, not explosion.";
+
+            case ZEN -> "Stillness isn't empty . It's full of clarity .Youve stepped into calm";
         };
     }
 }

@@ -15,7 +15,7 @@ public class AchievementInitializer {
     public void init(){
         for(AchievementType type : AchievementType.values()){
 
-            if (achievementRepository.findByTypes(type).isEmpty()) {
+            if (achievementRepository.findByType(type).isEmpty()) {
 
                 Achievement achievement = Achievement.builder().title(type.name()).description("Unlock by completing related activity").type(type).targetValue(getTargetValue(type)).build();
 

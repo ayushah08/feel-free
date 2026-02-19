@@ -11,5 +11,5 @@ public interface AchievementRepository extends JpaRepository<Achievement , Long>
 
     Optional<Achievement> findByCode(String code);
 
-    Collection<Object> findByTypes(AchievementType type);
+    Collection<Object> findByType(AchievementType type);
 }
