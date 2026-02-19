@@ -1,8 +1,8 @@
-package com.feelfree.backend.entity;
+package com.feelfree.backend.entity.Mood;
 
+import com.feelfree.backend.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 

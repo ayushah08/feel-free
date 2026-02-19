@@ -1,7 +1,7 @@
-package com.feelfree.backend.serviceimplementation;
+package com.feelfree.backend.serviceimplementation.Ai;
 
-import com.feelfree.backend.entity.MoodType;
-import com.feelfree.backend.service.AiService;
+import com.feelfree.backend.entity.Mood.MoodType;
+import com.feelfree.backend.service.Ai.AiService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,12 +1,12 @@
-package com.feelfree.backend.serviceimplementation;
+package com.feelfree.backend.serviceimplementation.Mood;
 
-import com.feelfree.backend.entity.Mood;
-import com.feelfree.backend.entity.MoodType;
+import com.feelfree.backend.entity.Mood.Mood;
+import com.feelfree.backend.entity.Mood.MoodType;
 import com.feelfree.backend.entity.User;
-import com.feelfree.backend.repository.MoodRepository;
+import com.feelfree.backend.repository.Mood.MoodRepository;
 import com.feelfree.backend.repository.UserRepository;
-import com.feelfree.backend.service.AiService;
-import com.feelfree.backend.service.MoodService;
+import com.feelfree.backend.service.Ai.AiService;
+import com.feelfree.backend.service.Mood.MoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
