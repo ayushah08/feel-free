@@ -13,4 +13,6 @@ public interface MoodRepository extends JpaRepository<Mood , Long> {
     int countByUserAndMoodType(User user, MoodType moodType);
 
     List<Mood> findUserById(Long userId);
+
+    Object countByUserId(Long id);
 }

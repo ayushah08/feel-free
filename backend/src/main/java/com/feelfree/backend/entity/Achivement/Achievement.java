@@ -21,7 +21,13 @@ public class Achievement {
 
     private String title;
     private String description;
-    private String type;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false,unique = true)
+    private AchievementType type;
+
+
     private String rarity;
     private int targetValue;
 }
